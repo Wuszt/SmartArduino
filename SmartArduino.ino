@@ -3,29 +3,35 @@
 #include "TVModeDetector.h"
 #include "Utils.h"
 #include "Config.h"
+#include "Logger.h"
 
 WiFiMulti WiFiMulti;
+SA::TVModeDetector tvModeDetector;
+std::unique_ptr<SA::Logger> logger;
 
 void setup() 
 {
   SA::Utils::InitializeSerial();
   WiFiMulti = SA::Utils::InitializeWiFi();
   SA::Utils::InitializeClock();
+  logger = std::make_unique<SA::Logger>();
 }
-
-SA::TVModeDetector tvModeDetector;
 
 void loop() 
 {
   const uint32_t startTime = micros();
-  NetworkClientSecure client;
-  client.setCACert(SA::Config::c_smartThingsRootCA);
   {
-    tvModeDetector.Update(client);
-  }
+    NetworkClientSecure client;
+    client.setCACert(SA::Config::c_smartThingsRootCA);
 
-  // esp_sleep_enable_timer_wakeup(5 * 1000000ULL);
-  // esp_light_sleep_start();
+    String authToken = SA::Utils::GetToken(client);
+    tvModeDetector.Update(client, authToken.c_str());
+    logger->Update(client, authToken.c_str());
+
+    // esp_sleep_enable_timer_wakeup(5 * 1000000ULL);
+    // esp_light_sleep_start();
+  }
+  Serial.printf("Remaining memory=%u, Largest memory block=%u\n", ESP.getFreeHeap(), heap_caps_get_largest_free_block(MALLOC_CAP_8BIT));
 
   const uint32_t endTime = micros();
   const uint32_t elapsedTime = (endTime - startTime) / 1000u;

@@ -1,15 +1,16 @@
-#pragma once
-
+#include <memory>
 class NetworkClientSecure;
-class HTTPClient;
+class BleKeyboard;
 
 namespace SA
 {
-  class TVModeDetector
+  class Logger
   {
     public:
+      Logger();
+      ~Logger();
       void Update(NetworkClientSecure& client, const char* token);
     private:
-      void UpdateState(NetworkClientSecure& client, const char* token);
+      std::unique_ptr<BleKeyboard> m_keyboard;
   };
 }

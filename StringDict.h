@@ -2,7 +2,7 @@
 
 #include "Utils.h"
 #include <string_view>
-#include <map>
+#include <vector>
 #include <string>
 
 namespace SA
@@ -15,16 +15,25 @@ namespace SA
       template<class T>
       std::optional<T> GetValue(const char* key) const
       {
-          auto it = m_map.find(std::string(key));
-          if (it != m_map.end())
+          const std::size_t keyHash = std::hash<std::string_view>{}(key);
+          for (const Entry& entry : m_values)
           {
-              return SA::Utils::ParseValue<T>(it->second.c_str());
+            if (entry.m_key == keyHash)
+            {
+              return SA::Utils::ParseValue<T>(entry.m_value.c_str());
+            }
           }
 
           return {};
       }
 
     private:
-      std::map<std::string, std::string> m_map;
+      struct Entry
+      {
+        std::string m_value;
+        std::size_t m_key;
+      };
+
+      std::vector<Entry> m_values;
   };
 }
