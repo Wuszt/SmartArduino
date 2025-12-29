@@ -1,3 +1,5 @@
+#pragma once
+
 #include <memory>
 #include "SmartKeyboard.h"
 
@@ -5,11 +7,11 @@ class BleKeyboard;
 
 namespace SA
 {
-  class Logger : public SmartKeyboard
+  class SteamBootstrapper : public SmartKeyboard
   {
     public:
-      Logger(std::shared_ptr<BleKeyboard> keyboard);
-      
+      SteamBootstrapper(std::shared_ptr<BleKeyboard> keyboard);
+
     protected:
       virtual void OnTriggered() override;
   };

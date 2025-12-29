@@ -9,6 +9,7 @@ namespace SA::Config
   extern const char* c_initialRefreshToken;
   extern const char* c_pinTriggerDevice;
   extern const char* c_pin;
+  extern const char* c_steamTriggerDevice;
   extern const char* c_smartThingsURL;
   extern const char* c_smartThingsRootCA;
 }

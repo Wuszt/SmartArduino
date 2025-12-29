@@ -4,17 +4,24 @@
 #include "Utils.h"
 #include "Config.h"
 #include "Logger.h"
+#include "SteamBootstrapper.h"
+#include <NimBleKeyboard.h>
 
 WiFiMulti WiFiMulti;
 SA::TVModeDetector tvModeDetector;
 std::unique_ptr<SA::Logger> logger;
+std::unique_ptr<SA::SteamBootstrapper> steamBootstrapper;
 
 void setup() 
 {
   SA::Utils::InitializeSerial();
   WiFiMulti = SA::Utils::InitializeWiFi();
   SA::Utils::InitializeClock();
-  logger = std::make_unique<SA::Logger>();
+
+  std::shared_ptr<BleKeyboard> keyboard = std::make_shared<BleKeyboard>("SmartArduino", "SmartArduino", 100);
+  keyboard->begin();
+  logger = std::make_unique<SA::Logger>(keyboard);
+  steamBootstrapper = std::make_unique<SA::SteamBootstrapper>(keyboard);
 }
 
 void loop() 
@@ -27,6 +34,7 @@ void loop()
     String authToken = SA::Utils::GetToken(client);
     tvModeDetector.Update(client, authToken.c_str());
     logger->Update(client, authToken.c_str());
+    steamBootstrapper->Update(client, authToken.c_str());
 
     // esp_sleep_enable_timer_wakeup(5 * 1000000ULL);
     // esp_light_sleep_start();
