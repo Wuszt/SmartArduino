@@ -1,10 +1,10 @@
 #include "SteamBootstrapper.h"
 #include "Config.h"
-#include <NimBleKeyboard.h>
+#include <SABleKeyboard.h>
 
 namespace SA
 {
-  SteamBootstrapper::SteamBootstrapper(std::shared_ptr<BleKeyboard> keyboard)
+  SteamBootstrapper::SteamBootstrapper(std::shared_ptr<SABleKeyboard> keyboard)
     : SmartKeyboard(keyboard, Config::c_steamTriggerDevice)
   {}
 

@@ -62,8 +62,4 @@ namespace SA::Utils
 
   template<>
   std::optional<bool> ParseValue<bool>(const char* str);
-
-  String GetToken(NetworkClientSecure& client);
-
-  void RefreshDevice(NetworkClientSecure& client, const char* token, const char* deviceID);
 }

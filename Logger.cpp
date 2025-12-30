@@ -1,10 +1,10 @@
 #include "Logger.h"
 #include "Config.h"
-#include <NimBleKeyboard.h>
+#include <SABleKeyboard.h>
 
 namespace SA
 {
-  Logger::Logger(std::shared_ptr<BleKeyboard> keyboard)
+  Logger::Logger(std::shared_ptr<SABleKeyboard> keyboard)
     : SmartKeyboard(keyboard, Config::c_pinTriggerDevice)
   {}
 

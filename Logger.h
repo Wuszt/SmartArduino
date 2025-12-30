@@ -1,14 +1,13 @@
 #include <memory>
 #include "SmartKeyboard.h"
 
-class BleKeyboard;
-
 namespace SA
 {
+  class SABleKeyboard;
   class Logger : public SmartKeyboard
   {
     public:
-      Logger(std::shared_ptr<BleKeyboard> keyboard);
+      Logger(std::shared_ptr<SABleKeyboard> keyboard);
       
     protected:
       virtual void OnTriggered() override;

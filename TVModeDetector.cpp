@@ -1,7 +1,7 @@
 #include "TVModeDetector.h"
 
 #include <HTTPClient.h>
-#include "Utils.h"
+#include "SmartThingsUtils.h"
 #include <optional>
 #include "StringDict.h"
 #include "Config.h"

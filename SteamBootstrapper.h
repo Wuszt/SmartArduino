@@ -3,14 +3,13 @@
 #include <memory>
 #include "SmartKeyboard.h"
 
-class BleKeyboard;
-
 namespace SA
 {
+  class SABleKeyboard;
   class SteamBootstrapper : public SmartKeyboard
   {
     public:
-      SteamBootstrapper(std::shared_ptr<BleKeyboard> keyboard);
+      SteamBootstrapper(std::shared_ptr<SABleKeyboard> keyboard);
 
     protected:
       virtual void OnTriggered() override;

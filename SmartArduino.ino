@@ -5,12 +5,15 @@
 #include "Config.h"
 #include "Logger.h"
 #include "SteamBootstrapper.h"
-#include <NimBleKeyboard.h>
+#include "SABleKeyboard.h"
+#include "SmartThingsUtils.h"
+#include "KeyboardTracker.h"
 
 WiFiMulti WiFiMulti;
 SA::TVModeDetector tvModeDetector;
 std::unique_ptr<SA::Logger> logger;
 std::unique_ptr<SA::SteamBootstrapper> steamBootstrapper;
+std::unique_ptr<SA::KeyboardTracker> keyboardTracker;
 
 void setup() 
 {
@@ -18,10 +21,11 @@ void setup()
   WiFiMulti = SA::Utils::InitializeWiFi();
   SA::Utils::InitializeClock();
 
-  std::shared_ptr<BleKeyboard> keyboard = std::make_shared<BleKeyboard>("SmartArduino", "SmartArduino", 100);
+  std::shared_ptr<SA::SABleKeyboard> keyboard = std::make_shared<SA::SABleKeyboard>("SmartArduino", "SmartArduino", 100);
   keyboard->begin();
   logger = std::make_unique<SA::Logger>(keyboard);
   steamBootstrapper = std::make_unique<SA::SteamBootstrapper>(keyboard);
+  keyboardTracker = std::make_unique<SA::KeyboardTracker>(keyboard);
 }
 
 void loop() 
@@ -35,11 +39,12 @@ void loop()
     tvModeDetector.Update(client, authToken.c_str());
     logger->Update(client, authToken.c_str());
     steamBootstrapper->Update(client, authToken.c_str());
+    keyboardTracker->Update(client, authToken.c_str());
 
     // esp_sleep_enable_timer_wakeup(5 * 1000000ULL);
     // esp_light_sleep_start();
   }
-  Serial.printf("Remaining memory=%u, Largest memory block=%u\n", ESP.getFreeHeap(), heap_caps_get_largest_free_block(MALLOC_CAP_8BIT));
+  //Serial.printf("Remaining memory=%u, Largest memory block=%u\n", ESP.getFreeHeap(), heap_caps_get_largest_free_block(MALLOC_CAP_8BIT));
 
   const uint32_t endTime = micros();
   const uint32_t elapsedTime = (endTime - startTime) / 1000u;

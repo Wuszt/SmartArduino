@@ -10,6 +10,7 @@ namespace SA
   class StringDict
   {
     public:
+      StringDict() = default;
       StringDict(std::string_view str, std::string_view keyCommonPart = "");
 
       template<class T>
