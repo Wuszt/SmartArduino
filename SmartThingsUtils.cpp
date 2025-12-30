@@ -87,35 +87,7 @@ namespace SA::Utils
 
   void RefreshDevice(NetworkClientSecure& client, const char* token, const char* deviceID)
   {
-    HTTPClient https;
-    char buffer[256];
-    snprintf(buffer, sizeof(buffer), "%s/devices/%s/commands", Config::c_smartThingsURL, deviceID);
-    if (https.begin(client, buffer))
-    {
-      ON_SCOPE_EXIT( https.end(); );
-      https.addHeader("Authorization", String("Bearer ") + token);
-      https.addHeader("Content-Type", "application/json");
-      String body = R"rl(
-      {
-        "commands": [
-          {
-            "component": "main",
-            "capability": "refresh",
-            "command": "refresh"
-          }
-        ]
-      }
-      )rl";
-      const int httpCode = https.POST(body);
-      if (httpCode != HTTP_CODE_OK)
-      {
-        Serial.printf("[%hs] POST failed, error: %d | %s | %s\n", __FUNCTION__, httpCode, https.errorToString(httpCode).c_str(), https.getString().c_str());
-      }
-    }
-    else
-    {
-      Serial.printf("[%hs] Unable to connect to commands\n", __FUNCTION__);
-    }
+    SendCommand(client, token, deviceID, "main", "refresh", "refresh");
   }
 
   StringDict GetDeviceStatus(NetworkClientSecure& client, const char* token, const char* deviceID)
@@ -124,7 +96,7 @@ namespace SA::Utils
 
     Utils::RefreshDevice(client, token, deviceID);
 
-    delay(500);
+    delay(250);
 
     char buffer[256];
     snprintf(buffer, sizeof(buffer), "%s/devices/%s/status", Config::c_smartThingsURL, deviceID);
@@ -169,6 +141,7 @@ namespace SA::Utils
     snprintf(urlBuffer, sizeof(urlBuffer), "%s/devices/%s/commands", Config::c_smartThingsURL, deviceID);
     if (https.begin(client, urlBuffer))
     {
+      ON_SCOPE_EXIT( https.end(); );
       https.addHeader("Authorization", String("Bearer ") + token);
       https.addHeader("Content-Type", "application/json");
       const char* body = R"rl(
@@ -191,8 +164,6 @@ namespace SA::Utils
       {
         Serial.printf("[%hs] POST failed, error: %d | %s | %s\n", __FUNCTION__, httpCode, https.errorToString(httpCode).c_str(), https.getString().c_str());
       }
-
-      ON_SCOPE_EXIT( https.end(); );
     }
     else
     {
