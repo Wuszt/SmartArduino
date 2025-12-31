@@ -5,7 +5,7 @@
 namespace SA
 {
   Logger::Logger(std::shared_ptr<SABleKeyboard> keyboard)
-    : SmartKeyboard(keyboard, Config::c_pinTriggerDevice)
+    : KeyboardTrigger(keyboard, Config::c_pinTriggerDevice)
   {}
 
   void Logger::OnTriggered()

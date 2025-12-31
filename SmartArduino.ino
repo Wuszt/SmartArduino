@@ -8,12 +8,15 @@
 #include "SABleKeyboard.h"
 #include "SmartThingsUtils.h"
 #include "KeyboardTracker.h"
+#include "SmartThingsWorkerInterface.h"
 
 WiFiMulti WiFiMulti;
-SA::TVModeDetector tvModeDetector;
+std::unique_ptr<SA::TVModeDetector> tvModeDetector;
 std::unique_ptr<SA::Logger> logger;
 std::unique_ptr<SA::SteamBootstrapper> steamBootstrapper;
 std::unique_ptr<SA::KeyboardTracker> keyboardTracker;
+
+std::vector<std::unique_ptr<SA::ISmartThingsWorker>> m_smartThingsWorkers;
 
 void setup() 
 {
@@ -21,11 +24,14 @@ void setup()
   WiFiMulti = SA::Utils::InitializeWiFi();
   SA::Utils::InitializeClock();
 
+  m_smartThingsWorkers.push_back(std::make_unique<SA::TVModeDetector>());
+
   std::shared_ptr<SA::SABleKeyboard> keyboard = std::make_shared<SA::SABleKeyboard>("SmartArduino", "SmartArduino", 100);
   keyboard->begin();
-  logger = std::make_unique<SA::Logger>(keyboard);
-  steamBootstrapper = std::make_unique<SA::SteamBootstrapper>(keyboard);
-  keyboardTracker = std::make_unique<SA::KeyboardTracker>(keyboard);
+
+  m_smartThingsWorkers.push_back(std::make_unique<SA::Logger>(keyboard));
+  m_smartThingsWorkers.push_back(std::make_unique<SA::SteamBootstrapper>(keyboard));
+  m_smartThingsWorkers.push_back(std::make_unique<SA::KeyboardTracker>(keyboard));
 }
 
 void loop() 
@@ -36,10 +42,11 @@ void loop()
     client.setCACert(SA::Config::c_smartThingsRootCA);
 
     String authToken = SA::Utils::GetToken(client);
-    tvModeDetector.Update(client, authToken.c_str());
-    logger->Update(client, authToken.c_str());
-    steamBootstrapper->Update(client, authToken.c_str());
-    keyboardTracker->Update(client, authToken.c_str());
+
+    for (const auto& worker : m_smartThingsWorkers)
+    {
+      worker->Update(client, authToken.c_str());
+    }
 
     // esp_sleep_enable_timer_wakeup(5 * 1000000ULL);
     // esp_light_sleep_start();

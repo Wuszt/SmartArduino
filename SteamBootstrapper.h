@@ -1,12 +1,12 @@
 #pragma once
 
 #include <memory>
-#include "SmartKeyboard.h"
+#include "KeyboardTrigger.h"
 
 namespace SA
 {
   class SABleKeyboard;
-  class SteamBootstrapper : public SmartKeyboard
+  class SteamBootstrapper : public KeyboardTrigger
   {
     public:
       SteamBootstrapper(std::shared_ptr<SABleKeyboard> keyboard);

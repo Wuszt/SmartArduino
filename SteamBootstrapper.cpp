@@ -5,7 +5,7 @@
 namespace SA
 {
   SteamBootstrapper::SteamBootstrapper(std::shared_ptr<SABleKeyboard> keyboard)
-    : SmartKeyboard(keyboard, Config::c_steamTriggerDevice)
+    : KeyboardTrigger(keyboard, Config::c_steamTriggerDevice)
   {}
 
   void SteamBootstrapper::OnTriggered()

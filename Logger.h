@@ -1,10 +1,10 @@
 #include <memory>
-#include "SmartKeyboard.h"
+#include "KeyboardTrigger.h"
 
 namespace SA
 {
   class SABleKeyboard;
-  class Logger : public SmartKeyboard
+  class Logger : public KeyboardTrigger
   {
     public:
       Logger(std::shared_ptr<SABleKeyboard> keyboard);

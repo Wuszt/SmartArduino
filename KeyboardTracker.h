@@ -1,3 +1,4 @@
+#include "SmartThingsWorkerInterface.h"
 #include <memory>
 
 class NetworkClientSecure;
@@ -5,7 +6,7 @@ class NetworkClientSecure;
 namespace SA
 {
   class SABleKeyboard;
-  class KeyboardTracker
+  class KeyboardTracker : public ISmartThingsWorker
   {
     public:
       KeyboardTracker(std::shared_ptr<SABleKeyboard> keyboard);

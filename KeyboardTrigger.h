@@ -1,4 +1,5 @@
 #pragma once
+#include "SmartThingsWorkerInterface.h"
 
 #include <memory>
 class NetworkClientSecure;
@@ -6,11 +7,11 @@ class NetworkClientSecure;
 namespace SA
 {
   class SABleKeyboard;
-  class SmartKeyboard
+  class KeyboardTrigger : public ISmartThingsWorker
   {
     public:
-      SmartKeyboard(std::shared_ptr<SABleKeyboard> keyboard, const char* triggeringDeviceID);
-      void Update(NetworkClientSecure& client, const char* token);
+      KeyboardTrigger(std::shared_ptr<SABleKeyboard> keyboard, const char* triggeringDeviceID);
+      virtual void Update(NetworkClientSecure& client, const char* token) override;
 
     protected:
       virtual void OnTriggered() = 0;

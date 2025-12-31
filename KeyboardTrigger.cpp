@@ -1,3 +1,4 @@
+#include "KeyboardTrigger.h"
 #include "Logger.h"
 #include "Config.h"
 #include <HTTPClient.h>
@@ -18,12 +19,12 @@ namespace SA
     SA::Utils::SetSwitchValue(client, token, deviceID, false);
   }
 
-  SmartKeyboard::SmartKeyboard(std::shared_ptr<SABleKeyboard> keyboard, const char* triggeringDeviceID)
+  KeyboardTrigger::KeyboardTrigger(std::shared_ptr<SABleKeyboard> keyboard, const char* triggeringDeviceID)
     : m_keyboard(keyboard)
     , m_triggeringDeviceID(triggeringDeviceID)
   {}
 
-  void SmartKeyboard::Update(NetworkClientSecure& client, const char* token)
+  void KeyboardTrigger::Update(NetworkClientSecure& client, const char* token)
   {
     if (ShouldBeTriggered(client, token, m_triggeringDeviceID))
     {
