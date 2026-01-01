@@ -7,4 +7,4 @@ SmartArduino is an experimental **ESP32 + Arduino** project focused on integrati
 * Handles access / refresh tokens
 * Uses HTTPS with `NetworkClientSecure`
 * Supports BLE features (e.g. HID keyboard, connection tracking)
-* Runs on ESP32 with Wi-Fi and FreeRTOS tasks
+* Communicates with LaMetric clock
