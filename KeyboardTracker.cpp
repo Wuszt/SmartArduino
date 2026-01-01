@@ -13,7 +13,7 @@ namespace SA
   {
     if (!m_hasValue)
     {
-      m_isAuthenticated = Utils::GetSwitchValue(client, token, Config::c_keyboardConnectedDevice);
+      m_isAuthenticated = Utils::IsSwitchEnabled(client, token, Config::c_keyboardConnectedDevice, true);
       m_hasValue = true;
     }
 

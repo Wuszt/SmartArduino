@@ -91,7 +91,6 @@ namespace SA
         snprintf(bodyBuffer, sizeof(bodyBuffer), body, shouldTVModeBeOn ? "on" : "off");
 
         const int httpCode = https.POST(bodyBuffer);
-        Serial.printf("Turned %s \n", shouldTVModeBeOn ? "ON" : "OFF");
 
         if (httpCode != HTTP_CODE_OK)
         {

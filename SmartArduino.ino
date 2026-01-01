@@ -9,12 +9,9 @@
 #include "SmartThingsUtils.h"
 #include "KeyboardTracker.h"
 #include "SmartThingsWorkerInterface.h"
+#include "LaMetricRoomTemperatureProvider.h"
 
 WiFiMulti WiFiMulti;
-std::unique_ptr<SA::TVModeDetector> tvModeDetector;
-std::unique_ptr<SA::Logger> logger;
-std::unique_ptr<SA::SteamBootstrapper> steamBootstrapper;
-std::unique_ptr<SA::KeyboardTracker> keyboardTracker;
 
 std::vector<std::unique_ptr<SA::ISmartThingsWorker>> m_smartThingsWorkers;
 
@@ -25,6 +22,7 @@ void setup()
   SA::Utils::InitializeClock();
 
   m_smartThingsWorkers.push_back(std::make_unique<SA::TVModeDetector>());
+  m_smartThingsWorkers.push_back(std::make_unique<SA::LaMetricRoomTemperatureProvider>());
 
   std::shared_ptr<SA::SABleKeyboard> keyboard = std::make_shared<SA::SABleKeyboard>("SmartArduino", "SmartArduino", 100);
   keyboard->begin();

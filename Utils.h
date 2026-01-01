@@ -52,7 +52,10 @@ namespace SA::Utils
 	bool StrCmpIgnoreCase(const char* l, const char* r);
 
 	template<class T>
-  std::optional<T> ParseValue(const char* str);
+  std::optional<T> ParseValue(const char* str)
+  {
+    static_assert(false, "Unsupported type");
+  }
 
   template<>
   std::optional<const char*> ParseValue<const char*>(const char* str);
@@ -62,4 +65,7 @@ namespace SA::Utils
 
   template<>
   std::optional<bool> ParseValue<bool>(const char* str);
+
+  template<>
+  std::optional<float> ParseValue<float>(const char* str);
 }

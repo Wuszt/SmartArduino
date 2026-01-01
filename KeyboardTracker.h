@@ -10,7 +10,7 @@ namespace SA
   {
     public:
       KeyboardTracker(std::shared_ptr<SABleKeyboard> keyboard);
-      void Update(NetworkClientSecure& client, const char* token);
+      virtual void Update(NetworkClientSecure& client, const char* token) override;
 
     private:
       std::shared_ptr<SABleKeyboard> m_keyboard;

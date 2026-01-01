@@ -11,6 +11,13 @@ namespace SA::Config
   extern const char* c_pin;
   extern const char* c_steamTriggerDevice;
   extern const char* c_keyboardConnectedDevice;
+  extern const char* c_roomThermometerDevice;
+  extern const char* c_roomHeaterDevice;
+
+  extern const char* c_laMetricToken;
+  extern const char* c_laMetricURL;
+  extern const char* c_laMetricTemperatureWidgetID;
+
   extern const char* c_smartThingsURL;
   extern const char* c_smartThingsRootCA;
 }

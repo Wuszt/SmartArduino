@@ -81,7 +81,7 @@ namespace SA::Utils
   {
     char *endptr;
     int result = strtol(str, &endptr, 10);
-    if (*endptr != '\0') 
+    if (endptr == str) 
     {
         return {};
     }
@@ -116,5 +116,17 @@ namespace SA::Utils
     }
     
     return {};
+  }
+
+  template<>
+  std::optional<float> ParseValue<float>(const char* str)
+  {
+    char *endptr;
+    float result = strtof(str, &endptr);
+    if (endptr == str) 
+    {
+        return {};
+    }
+    return result;
   }
 }

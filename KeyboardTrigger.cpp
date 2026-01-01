@@ -11,7 +11,7 @@ namespace SA
 {
   bool ShouldBeTriggered(NetworkClientSecure& client, const char* token, const char* deviceID)
   {
-    return Utils::GetSwitchValue(client, token, deviceID);
+    return Utils::IsSwitchEnabled(client, token, deviceID, true);
   }
 
   void ReportCompletion(NetworkClientSecure& client, const char* token, const char* deviceID)

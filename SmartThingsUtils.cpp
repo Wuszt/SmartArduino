@@ -90,11 +90,14 @@ namespace SA::Utils
     SendCommand(client, token, deviceID, "main", "refresh", "refresh");
   }
 
-  StringDict GetDeviceStatus(NetworkClientSecure& client, const char* token, const char* deviceID)
+  StringDict GetDeviceStatus(NetworkClientSecure& client, const char* token, const char* deviceID, bool forceDataRefresh)
   {
     HTTPClient https;
 
-    Utils::RefreshDevice(client, token, deviceID);
+    if (forceDataRefresh)
+    {
+      Utils::RefreshDevice(client, token, deviceID); 
+    }
 
     delay(250);
 
@@ -121,16 +124,6 @@ namespace SA::Utils
 
     String payload = https.getString();
     return StringDict(payload.c_str(), "/root/components/main/");
-  }
-
-  bool IsSwitchEnabled(NetworkClientSecure& client, const char* token, const char* deviceID)
-  {
-    if (auto switchValue = GetDeviceValue<bool>(client, token, deviceID, "switch/switch/value"))
-    {
-      return *switchValue;
-    }
-
-    return false;
   }
 
   void SendCommand(NetworkClientSecure& client, const char* token, const char* deviceID, const char* component, const char* capability, const char* command)
@@ -176,9 +169,9 @@ namespace SA::Utils
     SendCommand(client, token, deviceID, "main", "switch", value ? "on" : "off");
   }
 
-  bool GetSwitchValue(NetworkClientSecure& client, const char* token, const char* deviceID)
+  bool IsSwitchEnabled(NetworkClientSecure& client, const char* token, const char* deviceID, bool forceDataRefresh)
   {
-    if (auto switchValue = GetDeviceValue<bool>(client, token, deviceID, "switch/switch/value"))
+    if (auto switchValue = GetDeviceValue<bool>(client, token, deviceID, "switch/switch/value", forceDataRefresh))
     {
       return *switchValue;
     }
