@@ -1,5 +1,6 @@
 #include "SmartThingsWorkerInterface.h"
 #include <memory>
+#include <optional>
 
 class NetworkClientSecure;
 
@@ -14,7 +15,6 @@ namespace SA
 
     private:
       std::shared_ptr<SABleKeyboard> m_keyboard;
-      bool m_isAuthenticated = false;
-      bool m_hasValue = false;
+      std::optional<bool> m_isAuthenticated;
   };
 }

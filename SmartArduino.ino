@@ -10,6 +10,7 @@
 #include "KeyboardTracker.h"
 #include "SmartThingsWorkerInterface.h"
 #include "LaMetricRoomTemperatureProvider.h"
+#include "LaMetricBluetoothController.h"
 
 WiFiMulti WiFiMulti;
 
@@ -23,6 +24,7 @@ void setup()
 
   m_smartThingsWorkers.push_back(std::make_unique<SA::TVModeDetector>());
   m_smartThingsWorkers.push_back(std::make_unique<SA::LaMetricRoomTemperatureProvider>());
+  m_smartThingsWorkers.push_back(std::make_unique<SA::LaMetricBluetoothController>());
 
   std::shared_ptr<SA::SABleKeyboard> keyboard = std::make_shared<SA::SABleKeyboard>("SmartArduino", "SmartArduino", 100);
   keyboard->begin();
@@ -61,6 +63,9 @@ void loop()
     sleepingTime = targetDelay - elapsedTime;
   }
 
-  Serial.printf("Sleeping for %fs...\n", sleepingTime / 1000.0f);
-  delay(sleepingTime);
+  if (sleepingTime > 0)
+  {
+    //Serial.printf("Sleeping for %fs...\n", sleepingTime / 1000.0f);
+    delay(sleepingTime);
+  }
 }

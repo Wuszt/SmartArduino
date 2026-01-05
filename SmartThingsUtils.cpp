@@ -79,7 +79,7 @@ namespace SA::Utils
       const time_t hours = remainingSeconds / 3600;
       const time_t minutes = remainingSeconds / 60 - hours * 60;
       const time_t seconds = remainingSeconds - hours * 3600 - minutes * 60;
-      Serial.printf("Token is valid for the next %" PRId64 "h %" PRId64 "m %" PRId64 "s \n", hours, minutes, seconds);
+      //Serial.printf("Token is valid for the next %" PRId64 "h %" PRId64 "m %" PRId64 "s \n", hours, minutes, seconds);
     }
 
     return prefs.getString(tokenKey, "");

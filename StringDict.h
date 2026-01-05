@@ -4,6 +4,7 @@
 #include <string_view>
 #include <vector>
 #include <string>
+#include "Arduino.h"
 
 namespace SA
 {
@@ -17,24 +18,26 @@ namespace SA
       std::optional<T> GetValue(const char* key) const
       {
           const std::size_t keyHash = std::hash<std::string_view>{}(key);
-          for (const Entry& entry : m_values)
+          for (const Entry& entry : m_keys)
           {
-            if (entry.m_key == keyHash)
+            if (entry.m_keyHash == static_cast<int32_t>(keyHash))
             {
-              return SA::Utils::ParseValue<T>(entry.m_value.c_str());
+              return SA::Utils::ParseValue<T>(m_values[entry.m_valueIndex].c_str());
             }
           }
 
+          Serial.println("no key");
           return {};
       }
 
     private:
       struct Entry
       {
-        std::string m_value;
-        std::size_t m_key;
+        int32_t m_keyHash;
+        int32_t m_valueIndex;
       };
 
-      std::vector<Entry> m_values;
+      std::vector<Entry> m_keys;
+      std::vector<std::string> m_values;
   };
 }

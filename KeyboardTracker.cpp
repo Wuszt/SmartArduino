@@ -11,18 +11,18 @@ namespace SA
 
   void KeyboardTracker::Update(NetworkClientSecure& client, const char* token)
   {
-    if (!m_hasValue)
+    if (!m_isAuthenticated.has_value())
     {
       m_isAuthenticated = Utils::IsSwitchEnabled(client, token, Config::c_keyboardConnectedDevice, true);
-      m_hasValue = true;
     }
 
-    const bool wasAuthenticated = m_isAuthenticated;
-    m_isAuthenticated = m_keyboard->IsAuthenticated();
-    if (wasAuthenticated != m_isAuthenticated)
+    if (*m_isAuthenticated == m_keyboard->IsAuthenticated())
     {
-      Utils::SetSwitchValue(client, token, Config::c_keyboardConnectedDevice, m_isAuthenticated);
-      Serial.printf("Changed keyboard status: %s \n", m_isAuthenticated ? "ON" : "OFF");
+      return;
     }
+
+    m_isAuthenticated = m_keyboard->IsAuthenticated();
+
+    Utils::SetSwitchValue(client, token, Config::c_keyboardConnectedDevice, *m_isAuthenticated);
   }
 }
