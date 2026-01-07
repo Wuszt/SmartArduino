@@ -65,7 +65,7 @@ void loop()
 
   if (sleepingTime > 0)
   {
-    //Serial.printf("Sleeping for %fs...\n", sleepingTime / 1000.0f);
+    Serial.printf("Sleeping for %fs...\n", sleepingTime / 1000.0f);
     delay(sleepingTime);
   }
 }

@@ -31,7 +31,8 @@ namespace SA
     }
 
     snprintf(otherBuff, bufferSize, currentBuff, "");
-    Utils::PostToLaMetric(widgetID, otherBuff);
+    snprintf(currentBuff, bufferSize, "%s/actions", widgetID);
+    Utils::PostToLaMetric(currentBuff, otherBuff);
   }
 
   void LaMetricRoomTemperatureProvider::Update(NetworkClientSecure& STClient, const char* token)

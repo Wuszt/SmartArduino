@@ -1,8 +1,8 @@
 #pragma once
 #include "SmartThingsWorkerInterface.h"
+#include <optional>
 
 class NetworkClientSecure;
-class HTTPClient;
 
 namespace SA
 {
@@ -11,6 +11,6 @@ namespace SA
     public:
       void Update(NetworkClientSecure& client, const char* token) override;
     private:
-      void UpdateState(NetworkClientSecure& client, const char* token);
+      std::optional<bool> m_isEnabled;
   };
 }

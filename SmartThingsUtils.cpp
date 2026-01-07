@@ -97,9 +97,8 @@ namespace SA::Utils
     if (forceDataRefresh)
     {
       Utils::RefreshDevice(client, token, deviceID); 
+      delay(100);
     }
-
-    delay(250);
 
     char buffer[256];
     snprintf(buffer, sizeof(buffer), "%s/devices/%s/status", Config::c_smartThingsURL, deviceID);

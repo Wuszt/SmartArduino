@@ -28,7 +28,6 @@ namespace SA
   {
     if (ShouldBeTriggered(client, token, m_triggeringDeviceID))
     {
-      delay(500);
       if (m_keyboard->IsAuthenticated()) 
       {
         OnTriggered();
