@@ -10,6 +10,10 @@ namespace SA
     public:
       KeyboardTrigger(SABleKeyboard& keyboard, const char* triggeringDeviceID);
       virtual void Update() override;
+      virtual unsigned long GetInterval() const override
+      {
+        return 10u * 1000u;
+      }
 
     protected:
       virtual void OnTriggered() = 0;

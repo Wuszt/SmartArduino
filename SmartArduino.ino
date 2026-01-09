@@ -35,26 +35,14 @@ void setup()
 
 void loop() 
 {
-  const uint32_t startTime = micros();
-  {
-    SA::UpdateManager::Get().Update();
-    SA::SmartThingsManager::Get().PostUpdate();
-  }
+  SA::UpdateManager::Get().Update();
+  SA::SmartThingsManager::Get().PostUpdate();
   //Serial.printf("Remaining memory=%u, Largest memory block=%u\n", ESP.getFreeHeap(), heap_caps_get_largest_free_block(MALLOC_CAP_8BIT));
-
-  const uint32_t endTime = micros();
-  const uint32_t elapsedTime = (endTime - startTime) / 1000u;
-  const uint32_t targetDelay = 10000;
-
-  uint32_t sleepingTime = 0u;
-  if (elapsedTime < targetDelay)
+  const unsigned long nextUpdateTimestamp = SA::UpdateManager::Get().GetNextUpdateTimestamp();
+  if (nextUpdateTimestamp > millis())
   {
-    sleepingTime = targetDelay - elapsedTime;
-  }
-
-  if (sleepingTime > 0)
-  {
-    Serial.printf("Sleeping for %fs...\n", sleepingTime / 1000.0f);
-    delay(sleepingTime);
+    const unsigned long delayDuration =  nextUpdateTimestamp - millis();
+    Serial.printf("Sleeping for %fs...\n", delayDuration / 1000.0f);
+    delay(delayDuration);
   }
 }

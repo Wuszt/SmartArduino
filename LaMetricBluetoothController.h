@@ -10,6 +10,11 @@ namespace SA
   {
   public:
     virtual void Update() override;
+    virtual unsigned long GetInterval() const override
+      {
+        return 60u * 1000u;
+      }
+  
   private:
     std::optional<bool> m_shouldBeEnabled;
   };

@@ -12,6 +12,10 @@ namespace SA
     public:
       KeyboardTracker(SABleKeyboard& keyboard);
       virtual void Update() override;
+      virtual unsigned long GetInterval() const override
+      {
+        return 10u * 1000u;
+      }
 
     private:
       SABleKeyboard& m_keyboard;
