@@ -1,5 +1,5 @@
 #include "LaMetricRoomTemperatureProvider.h"
-#include "SmartThingsUtils.h"
+#include "SmartThingsManager.h"
 #include "Config.h"
 #include <Arduino.h>
 #include <span>
@@ -35,15 +35,15 @@ namespace SA
     Utils::PostToLaMetric(currentBuff, otherBuff);
   }
 
-  void LaMetricRoomTemperatureProvider::Update(NetworkClientSecure& STClient, const char* token)
+  void LaMetricRoomTemperatureProvider::Update()
   {
-    if (const auto result = SA::Utils::GetDeviceValue<float>(STClient, token, Config::c_roomThermometerDevice, "temperatureMeasurement/temperature/value", false))
+    if (const auto result = SmartThingsManager::Get().GetDeviceValue<float>(Config::c_roomThermometerDevice, "temperatureMeasurement/temperature/value", false))
     {
       char valueBuffer[8];
       snprintf(valueBuffer, sizeof(valueBuffer), "%.1f°C", *result);
 
       bool isHeating = false;
-      if (const auto result = SA::Utils::GetDeviceValue<const char*>(STClient, token, Config::c_roomHeaterDevice, "thermostatOperatingState/thermostatOperatingState/value", false))
+      if (const auto result = SmartThingsManager::Get().GetDeviceValue<const char*>(Config::c_roomHeaterDevice, "thermostatOperatingState/thermostatOperatingState/value", false))
       {
         isHeating = SA::Utils::StrCmpIgnoreCase(*result, "heating");
       }

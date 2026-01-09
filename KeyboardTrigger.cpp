@@ -3,35 +3,35 @@
 #include "Config.h"
 #include <HTTPClient.h>
 #include <WString.h>
-#include "SmartThingsUtils.h"
+#include "SmartThingsManager.h"
 #include "StringDict.h"
 #include <SABleKeyboard.h>
 
 namespace SA
 {
-  bool ShouldBeTriggered(NetworkClientSecure& client, const char* token, const char* deviceID)
+  bool ShouldBeTriggered(const char* deviceID)
   {
-    return Utils::IsSwitchEnabled(client, token, deviceID, true);
+    return SmartThingsManager::Get().IsSwitchEnabled(deviceID, true);
   }
 
-  void ReportCompletion(NetworkClientSecure& client, const char* token, const char* deviceID)
+  void ReportCompletion(const char* deviceID)
   {
-    SA::Utils::SetSwitchValue(client, token, deviceID, false);
+    SmartThingsManager::Get().SetSwitchValue(deviceID, false);
   }
 
-  KeyboardTrigger::KeyboardTrigger(std::shared_ptr<SABleKeyboard> keyboard, const char* triggeringDeviceID)
+  KeyboardTrigger::KeyboardTrigger(SABleKeyboard& keyboard, const char* triggeringDeviceID)
     : m_keyboard(keyboard)
     , m_triggeringDeviceID(triggeringDeviceID)
   {}
 
-  void KeyboardTrigger::Update(NetworkClientSecure& client, const char* token)
+  void KeyboardTrigger::Update()
   {
-    if (ShouldBeTriggered(client, token, m_triggeringDeviceID))
+    if (ShouldBeTriggered(m_triggeringDeviceID))
     {
-      if (m_keyboard->IsAuthenticated()) 
+      if (m_keyboard.IsAuthenticated()) 
       {
         OnTriggered();
-        ReportCompletion(client, token, m_triggeringDeviceID);
+        ReportCompletion(m_triggeringDeviceID);
       }
     }
   }

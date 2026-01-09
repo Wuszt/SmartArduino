@@ -1,15 +1,15 @@
 #pragma once
-#include "SmartThingsWorkerInterface.h"
+#include "UpdateManager.h"
 #include <optional>
 
 class NetworkClientSecure;
 
 namespace SA
 {
-  class LaMetricBluetoothController : public ISmartThingsWorker
+  class LaMetricBluetoothController : public IUpdatable
   {
   public:
-    virtual void Update(NetworkClientSecure& client, const char* token) override;
+    virtual void Update() override;
   private:
     std::optional<bool> m_shouldBeEnabled;
   };

@@ -6,15 +6,23 @@
 #include "Logger.h"
 #include "SteamBootstrapper.h"
 #include "SABleKeyboard.h"
-#include "SmartThingsUtils.h"
 #include "KeyboardTracker.h"
 #include "SmartThingsWorkerInterface.h"
 #include "LaMetricRoomTemperatureProvider.h"
 #include "LaMetricBluetoothController.h"
+#include "UpdateManager.h"
+#include "SmartThingsManager.h"
 
 WiFiMulti WiFiMulti;
 
-std::vector<std::unique_ptr<SA::ISmartThingsWorker>> m_smartThingsWorkers;
+SA::TVModeDetector g_tvModeDetector;
+SA::LaMetricRoomTemperatureProvider g_laMetricRoomTemperatureProvider;
+SA::LaMetricBluetoothController g_laMetricBluetoothController;
+
+SA::SABleKeyboard g_keyboard{"SmartArduino", "SmartArduino", 100};
+SA::Logger g_logger{g_keyboard};
+SA::SteamBootstrapper g_steamBootStrapper{g_keyboard};
+SA::KeyboardTracker g_keyboardTracker{g_keyboard};
 
 void setup() 
 {
@@ -22,34 +30,15 @@ void setup()
   WiFiMulti = SA::Utils::InitializeWiFi();
   SA::Utils::InitializeClock();
 
-  m_smartThingsWorkers.push_back(std::make_unique<SA::TVModeDetector>());
-  m_smartThingsWorkers.push_back(std::make_unique<SA::LaMetricRoomTemperatureProvider>());
-  m_smartThingsWorkers.push_back(std::make_unique<SA::LaMetricBluetoothController>());
-
-  std::shared_ptr<SA::SABleKeyboard> keyboard = std::make_shared<SA::SABleKeyboard>("SmartArduino", "SmartArduino", 100);
-  keyboard->begin();
-
-  m_smartThingsWorkers.push_back(std::make_unique<SA::Logger>(keyboard));
-  m_smartThingsWorkers.push_back(std::make_unique<SA::SteamBootstrapper>(keyboard));
-  m_smartThingsWorkers.push_back(std::make_unique<SA::KeyboardTracker>(keyboard));
+  g_keyboard.begin();
 }
 
 void loop() 
 {
   const uint32_t startTime = micros();
   {
-    NetworkClientSecure client;
-    client.setCACert(SA::Config::c_smartThingsRootCA);
-
-    String authToken = SA::Utils::GetToken(client);
-
-    for (const auto& worker : m_smartThingsWorkers)
-    {
-      worker->Update(client, authToken.c_str());
-    }
-
-    // esp_sleep_enable_timer_wakeup(5 * 1000000ULL);
-    // esp_light_sleep_start();
+    SA::UpdateManager::Get().Update();
+    SA::SmartThingsManager::Get().PostUpdate();
   }
   //Serial.printf("Remaining memory=%u, Largest memory block=%u\n", ESP.getFreeHeap(), heap_caps_get_largest_free_block(MALLOC_CAP_8BIT));
 

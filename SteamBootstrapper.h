@@ -9,7 +9,7 @@ namespace SA
   class SteamBootstrapper : public KeyboardTrigger
   {
     public:
-      SteamBootstrapper(std::shared_ptr<SABleKeyboard> keyboard);
+      SteamBootstrapper(SABleKeyboard& keyboard);
 
     protected:
       virtual void OnTriggered() override;

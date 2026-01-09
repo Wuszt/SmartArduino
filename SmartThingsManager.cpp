@@ -1,13 +1,12 @@
-#include "SmartThingsUtils.h"
-#include "Utils.h"
+#include "SmartThingsManager.h"
 #include "Config.h"
 #include <Preferences.h>
 #include <HTTPClient.h>
 #include "base64.h"
 
-namespace SA::Utils
+namespace SA
 {
-  String GetToken(NetworkClientSecure& client)
+  String GetOrCreateToken(NetworkClientSecure& client)
   {
     const char* tokenKey = "token";
     const char* refreshTokenKey = "refreshToken";
@@ -85,30 +84,86 @@ namespace SA::Utils
     return prefs.getString(tokenKey, "");
   }
 
-  void RefreshDevice(NetworkClientSecure& client, const char* token, const char* deviceID)
+  SmartThingsManager::Cache& SmartThingsManager::GetCache()
   {
-    SendCommand(client, token, deviceID, "main", "refresh", "refresh");
+    if (!m_cache.has_value())
+    {
+      m_cache = Cache();
+      m_cache->m_client.setCACert(SA::Config::c_smartThingsRootCA);
+      m_cache->m_authToken = GetOrCreateToken(m_cache->m_client);
+    }
+
+    return *m_cache;
   }
 
-  StringDict GetDeviceStatus(NetworkClientSecure& client, const char* token, const char* deviceID, bool forceDataRefresh)
+  void SmartThingsManager::SendCommand(const char* deviceID, const char* component, const char* capability, const char* command)
+  {
+    HTTPClient https;
+
+    {
+      char urlBuffer[256];
+      snprintf(urlBuffer, sizeof(urlBuffer), "%s/devices/%s/commands", Config::c_smartThingsURL, deviceID);
+      if (!https.begin(GetClient(), urlBuffer))
+      {
+        Serial.printf("[%hs] Unable to connect to commands\n", __FUNCTION__);
+        return;
+      }
+    }
+
+    ON_SCOPE_EXIT( https.end(); );
+
+    {
+      char headerBuffer[256];
+      snprintf(headerBuffer, sizeof(headerBuffer), "Bearer %s", GetToken());
+      https.addHeader("Authorization", headerBuffer);
+    }
+
+    https.addHeader("Content-Type", "application/json");
+    const char* body = R"rl(
+    {
+      "commands": [
+        {
+          "component": "%s",
+          "capability": "%s",
+          "command": "%s"
+        }
+      ]
+    }
+    )rl";
+  
+    char bodyBuffer[512];
+    snprintf(bodyBuffer, sizeof(bodyBuffer), body, component, capability, command);
+    const int httpCode = https.POST(bodyBuffer);
+
+    if (httpCode != HTTP_CODE_OK)
+    {
+      Serial.printf("[%hs] POST failed, error: %d | %s | %s\n", __FUNCTION__, httpCode, https.errorToString(httpCode).c_str(), https.getString().c_str());
+    }
+  }
+
+  StringDict SmartThingsManager::GetDeviceStatus(const char* deviceID, bool forceDataRefresh)
   {
     HTTPClient https;
 
     if (forceDataRefresh)
     {
-      Utils::RefreshDevice(client, token, deviceID); 
+      RefreshDevice(deviceID); 
       delay(100);
     }
 
     char buffer[256];
     snprintf(buffer, sizeof(buffer), "%s/devices/%s/status", Config::c_smartThingsURL, deviceID);
-    if (!https.begin(client, buffer))
+    if (!https.begin(GetClient(), buffer))
     {
       Serial.printf("[%hs] Unable to connect to status\n", __FUNCTION__);
       return {};
     }
 
-    https.addHeader("Authorization", String("Bearer ") + token);
+    {
+      char headerBuffer[256];
+      snprintf(headerBuffer, sizeof(headerBuffer), "Bearer %s", GetToken());
+      https.addHeader("Authorization", headerBuffer);
+    }
     https.addHeader("Content-Type", "application/json");
 
     ON_SCOPE_EXIT( https.end(); );
@@ -125,56 +180,33 @@ namespace SA::Utils
     return StringDict(payload.c_str(), "/root/components/main/");
   }
 
-  void SendCommand(NetworkClientSecure& client, const char* token, const char* deviceID, const char* component, const char* capability, const char* command)
+  void SmartThingsManager::RefreshDevice(const char* deviceID)
   {
-    HTTPClient https;
-
-    char urlBuffer[256];
-    snprintf(urlBuffer, sizeof(urlBuffer), "%s/devices/%s/commands", Config::c_smartThingsURL, deviceID);
-    if (https.begin(client, urlBuffer))
-    {
-      ON_SCOPE_EXIT( https.end(); );
-      https.addHeader("Authorization", String("Bearer ") + token);
-      https.addHeader("Content-Type", "application/json");
-      const char* body = R"rl(
-      {
-        "commands": [
-          {
-            "component": "%s",
-            "capability": "%s",
-            "command": "%s"
-          }
-        ]
-      }
-      )rl";
-    
-      char bodyBuffer[512];
-      snprintf(bodyBuffer, sizeof(bodyBuffer), body, component, capability, command);
-      const int httpCode = https.POST(bodyBuffer);
-
-      if (httpCode != HTTP_CODE_OK)
-      {
-        Serial.printf("[%hs] POST failed, error: %d | %s | %s\n", __FUNCTION__, httpCode, https.errorToString(httpCode).c_str(), https.getString().c_str());
-      }
-    }
-    else
-    {
-      Serial.printf("[%hs] Unable to connect to commands\n", __FUNCTION__);
-    }
+    SendCommand(deviceID, "main", "refresh", "refresh");
   }
 
-  void SetSwitchValue(NetworkClientSecure& client, const char* token, const char* deviceID, bool value)
+  void SmartThingsManager::SetSwitchValue(const char* deviceID, bool value)
   {
-    SendCommand(client, token, deviceID, "main", "switch", value ? "on" : "off");
+    SendCommand(deviceID, "main", "switch", value ? "on" : "off");
   }
 
-  bool IsSwitchEnabled(NetworkClientSecure& client, const char* token, const char* deviceID, bool forceDataRefresh)
+  bool SmartThingsManager::IsSwitchEnabled(const char* deviceID, bool forceDataRefresh)
   {
-    if (auto switchValue = GetDeviceValue<bool>(client, token, deviceID, "switch/switch/value", forceDataRefresh))
+    if (auto switchValue = GetDeviceValue<bool>(deviceID, "switch/switch/value", forceDataRefresh))
     {
       return *switchValue;
     }
 
     return false;
+  }
+
+  NetworkClientSecure& SmartThingsManager::GetClient()
+  {
+    return GetCache().m_client;
+  }
+  
+  const char* SmartThingsManager::GetToken()
+  {
+    return GetCache().m_authToken.c_str();
   }
 }

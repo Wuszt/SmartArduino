@@ -1,5 +1,5 @@
 #include "LaMetricBluetoothController.h"
-#include "SmartThingsUtils.h"
+#include "SmartThingsManager.h"
 #include "Config.h"
 #include <HTTPClient.h>
 #include "base64.h"
@@ -9,7 +9,7 @@
 
 namespace SA
 {
-  void LaMetricBluetoothController::Update(NetworkClientSecure& client, const char* token)
+  void LaMetricBluetoothController::Update()
   {
     if (!m_shouldBeEnabled.has_value())
     {
@@ -25,7 +25,7 @@ namespace SA
       }
     }
 
-    const bool shouldBluetoothBeEnabled = !Utils::IsSwitchEnabled(client, token, Config::c_disableLaMetricBluetoothDevice, false);
+    const bool shouldBluetoothBeEnabled = !SmartThingsManager::Get().IsSwitchEnabled(Config::c_disableLaMetricBluetoothDevice, false);
     if (*m_shouldBeEnabled == shouldBluetoothBeEnabled)
     {
       return;

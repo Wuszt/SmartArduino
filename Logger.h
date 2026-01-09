@@ -7,7 +7,7 @@ namespace SA
   class Logger : public KeyboardTrigger
   {
     public:
-      Logger(std::shared_ptr<SABleKeyboard> keyboard);
+      Logger(SABleKeyboard& keyboard);
       
     protected:
       virtual void OnTriggered() override;

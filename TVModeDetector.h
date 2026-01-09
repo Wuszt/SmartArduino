@@ -1,15 +1,15 @@
 #pragma once
-#include "SmartThingsWorkerInterface.h"
+#include "UpdateManager.h"
 #include <optional>
 
 class NetworkClientSecure;
 
 namespace SA
 {
-  class TVModeDetector : public ISmartThingsWorker
+  class TVModeDetector : public IUpdatable
   {
     public:
-      void Update(NetworkClientSecure& client, const char* token) override;
+      void Update() override;
     private:
       std::optional<bool> m_isEnabled;
   };

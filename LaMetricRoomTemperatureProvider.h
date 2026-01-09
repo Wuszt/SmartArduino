@@ -1,11 +1,12 @@
 #pragma once
-#include "SmartThingsWorkerInterface.h"
+#include "UpdateManager.h"
 
 class NetworkClientSecure;
 namespace SA
 {
-  class LaMetricRoomTemperatureProvider : public ISmartThingsWorker
+  class LaMetricRoomTemperatureProvider : public IUpdatable
   {
-    virtual void Update(NetworkClientSecure& client, const char* token) override;
+  private:
+    virtual void Update() override;
   };
 }
