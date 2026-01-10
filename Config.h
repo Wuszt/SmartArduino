@@ -17,7 +17,7 @@ namespace SA::Config
 
   extern const char* c_laMetricToken;
   extern const char* c_laMetricURL;
-  extern const char* c_laMetricTemperatureWidgetID;
+  extern const char* c_laMetricWidgetID;
   extern const char* c_laMetricDeviceBluetooth;
 
   extern const char* c_smartThingsURL;

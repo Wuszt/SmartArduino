@@ -7,11 +7,11 @@
 #include "SteamBootstrapper.h"
 #include "SABleKeyboard.h"
 #include "KeyboardTracker.h"
-#include "SmartThingsWorkerInterface.h"
 #include "LaMetricRoomTemperatureProvider.h"
 #include "LaMetricBluetoothController.h"
 #include "UpdateManager.h"
 #include "SmartThingsManager.h"
+#include "LaMetricManager.h"
 
 WiFiMulti WiFiMulti;
 
@@ -37,6 +37,7 @@ void loop()
 {
   SA::UpdateManager::Get().Update();
   SA::SmartThingsManager::Get().PostUpdate();
+  SA::LaMetricManager::Get().PostUpdate();
   //Serial.printf("Remaining memory=%u, Largest memory block=%u\n", ESP.getFreeHeap(), heap_caps_get_largest_free_block(MALLOC_CAP_8BIT));
   const unsigned long nextUpdateTimestamp = SA::UpdateManager::Get().GetNextUpdateTimestamp();
   if (nextUpdateTimestamp > millis())
