@@ -48,7 +48,6 @@ namespace SA
 
     snprintf(otherBuff, bufferSize, currentBuff, "");
     snprintf(currentBuff, bufferSize, "%s/actions", Config::c_laMetricWidgetID);
-    Serial.println(otherBuff);
     Utils::PostToLaMetric(currentBuff, otherBuff);
   }
 
