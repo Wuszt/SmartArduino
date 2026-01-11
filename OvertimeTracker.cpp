@@ -41,6 +41,7 @@ namespace SA
         if (m_frameRequestHandle)
         {
           LaMetricManager::Get().RemoveFrame(*m_frameRequestHandle);
+          m_frameRequestHandle = nullptr;
         }
 
         m_remainingTime.reset();

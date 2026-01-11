@@ -14,6 +14,7 @@
 #include "LaMetricManager.h"
 #include "RequestsServer.h"
 #include "OvertimeTracker.h"
+#include "LaMetricAirQualityProvider.h"
 
 WiFiMulti WiFiMulti;
 
@@ -28,6 +29,8 @@ SA::KeyboardTracker g_keyboardTracker{g_keyboard};
 
 SA::RequestsServer g_server;
 SA::OvertimeTracker g_overtimeTracker(g_server);
+
+SA::LaMetricAirQualityProvider g_airQualityProvider;
 
 void setup() 
 {
