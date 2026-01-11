@@ -1,14 +1,16 @@
 #include <WString.h>
 #include <vector>
+#include <optional>
 
 namespace SA
 {
-  struct LaMetricFrameRequestHandle
+  class LaMetricFrameRequestHandle
   {
+  public:
     LaMetricFrameRequestHandle()
     {
-      static unsigned long m_prev = 0;
-      m_value == ++m_prev;
+      static unsigned long s_prev = 0;
+      m_value = ++s_prev;
     }
 
     bool operator==(const LaMetricFrameRequestHandle&) const = default;
@@ -28,8 +30,23 @@ namespace SA
         return s_instance;
       }
 
-      [[nodiscard]] RequestHandle AddFrame(const char* text, int icon);
-      bool UpdateFrame(RequestHandle handle, const char* text, int icon);
+      struct Frame
+      {
+        struct GoalData
+        {
+          int m_start = 0;
+          int m_current = 0;
+          int m_end = 0;
+        };
+
+        String m_text;
+        int m_icon = 0;
+        std::optional<GoalData> m_goalData;
+        int m_duration = 3000;
+      };
+
+      [[nodiscard]] RequestHandle AddFrame(Frame frame);
+      bool UpdateFrame(RequestHandle handle, Frame frame);
       bool RemoveFrame(RequestHandle handle);
 
       void PostUpdate();
@@ -37,14 +54,13 @@ namespace SA
     private:
       void SetFrames();
 
-      struct Frame
+      struct RegisteredFrame
       {
-        String m_text;
-        int m_icon;
+        Frame m_frame;
         RequestHandle m_handle;
       };
 
-      std::vector<Frame> m_frames;
+      std::vector<RegisteredFrame> m_frames;
       bool m_areFramesDirty = false;
   };
 }

@@ -2,23 +2,16 @@
 
 #include <utility>
 #include <optional>
+#include <type_traits>
 
 #define CONCAT(X, Y) CONCAT_INNER(X, Y)
 #define CONCAT_INNER(X,Y) X##Y
 
 #define ON_SCOPE_EXIT( Action ) SA::Internal::ActionOnScopeExit CONCAT( _scopeExit, __COUNTER__ ) ( [&]() { Action } )
 
-#define ASSERT(cond) \
-  do { \
-    if (!(cond)) { \
-      Serial.print("ASSERT FAILED: "); \
-      Serial.println(#cond); \
-      while (true) { delay(100); } \
-    } \
-  } while (0)
-
 class String;
 class NetworkClientSecure;
+class WiFiMulti;
 
 namespace SA::Internal
 {
@@ -40,7 +33,7 @@ namespace SA::Internal
 	};
 }
 
-class WiFiMulti;
+
 namespace SA::Utils
 {
   void InitializeSerial();

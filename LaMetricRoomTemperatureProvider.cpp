@@ -9,7 +9,7 @@ namespace SA
 {
   LaMetricRoomTemperatureProvider::LaMetricRoomTemperatureProvider()
   {
-    m_requestHandle = std::make_unique<LaMetricFrameRequestHandle>(LaMetricManager::Get().AddFrame("---", 0));
+    m_requestHandle = std::make_unique<LaMetricFrameRequestHandle>(LaMetricManager::Get().AddFrame({"---", 0}));
   }
 
   void LaMetricRoomTemperatureProvider::Update()
@@ -29,7 +29,10 @@ namespace SA
         Serial.println("Can't fetch thermostat state");
       }
 
-      LaMetricManager::Get().UpdateFrame(*m_requestHandle, valueBuffer, isHeating ? 19650 : 6157);
+      LaMetricManager::Frame frame;
+      frame.m_text = valueBuffer;
+      frame.m_icon = isHeating ? 19650 : 6157;
+      LaMetricManager::Get().UpdateFrame(*m_requestHandle, std::move(frame));
     }
     else
     {

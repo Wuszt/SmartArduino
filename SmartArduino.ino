@@ -12,6 +12,8 @@
 #include "UpdateManager.h"
 #include "SmartThingsManager.h"
 #include "LaMetricManager.h"
+#include "RequestsServer.h"
+#include "OvertimeTracker.h"
 
 WiFiMulti WiFiMulti;
 
@@ -24,6 +26,9 @@ SA::Logger g_logger{g_keyboard};
 SA::SteamBootstrapper g_steamBootStrapper{g_keyboard};
 SA::KeyboardTracker g_keyboardTracker{g_keyboard};
 
+SA::RequestsServer g_server;
+SA::OvertimeTracker g_overtimeTracker(g_server);
+
 void setup() 
 {
   SA::Utils::InitializeSerial();
@@ -31,6 +36,7 @@ void setup()
   SA::Utils::InitializeClock();
 
   g_keyboard.begin();
+  g_server.Init();
 }
 
 void loop() 

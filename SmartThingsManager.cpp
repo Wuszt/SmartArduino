@@ -3,6 +3,7 @@
 #include <Preferences.h>
 #include <HTTPClient.h>
 #include "base64.h"
+#include "Asserts.h"
 
 namespace SA
 {
