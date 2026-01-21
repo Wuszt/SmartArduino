@@ -37,6 +37,9 @@ namespace SA
     }
   }
 
+  LaMetricAirQualityProvider::LaMetricAirQualityProvider() = default;
+  LaMetricAirQualityProvider::~LaMetricAirQualityProvider() = default;
+
   void LaMetricAirQualityProvider::Update()
   {
     NetworkClient client;

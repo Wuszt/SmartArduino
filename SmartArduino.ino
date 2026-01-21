@@ -15,6 +15,7 @@
 #include "RequestsServer.h"
 #include "OvertimeTracker.h"
 #include "LaMetricAirQualityProvider.h"
+#include "HumidityPlantAlerter.h"
 
 WiFiMulti WiFiMulti;
 
@@ -31,6 +32,8 @@ SA::RequestsServer g_server;
 SA::OvertimeTracker g_overtimeTracker(g_server);
 
 SA::LaMetricAirQualityProvider g_airQualityProvider;
+
+SA::HumidityPlantAlerter g_humidityPlantAlerter;
 
 void setup() 
 {
@@ -54,5 +57,9 @@ void loop()
     const unsigned long delayDuration =  nextUpdateTimestamp - millis();
     Serial.printf("Sleeping for %fs...\n", delayDuration / 1000.0f);
     delay(delayDuration);
+  }
+  else
+  {
+    Serial.println("No sleeping");
   }
 }

@@ -4,17 +4,17 @@
 namespace SA
 {
   class LaMetricFrameRequestHandle;
-  class LaMetricAirQualityProvider : public IUpdatable
+  class HumidityPlantAlerter : public IUpdatable
   {
   public:
-    LaMetricAirQualityProvider();
-    ~LaMetricAirQualityProvider();
+    HumidityPlantAlerter();
+    ~HumidityPlantAlerter();
 
   private:
     virtual void Update() override;
     virtual unsigned long GetInterval() const override
     {
-      return 30u * 60u * 1000u;
+      return 5u * 60u * 1000u;
     }
 
     std::unique_ptr<LaMetricFrameRequestHandle> m_frameHandle;
