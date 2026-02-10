@@ -1,25 +1,25 @@
-#include "HumidityPlantAlerter.h"
+#include "CO2Alerter.h"
 #include "SmartThingsManager.h"
 #include "Config.h"
 #include "LaMetricManager.h"
 
 namespace SA
 {
-    HumidityPlantAlerter::HumidityPlantAlerter() = default;
-    HumidityPlantAlerter::~HumidityPlantAlerter() = default;
+    CO2Alerter::CO2Alerter() = default;
+    CO2Alerter::~CO2Alerter() = default;
 
-  void HumidityPlantAlerter::Update()
+  void CO2Alerter::Update()
   {
-    if (const auto result = SmartThingsManager::Get().GetDeviceValue<float>(Config::c_humidityPlantDevice, "relativeHumidityMeasurement/humidity/value", false))
+    if (const auto result = SmartThingsManager::Get().GetDeviceValue<int>(Config::c_co2DetectorDevice, "carbonDioxideMeasurement/carbonDioxide/value", false))
     {
-      constexpr float humidityThreshold = 5.0f;
+      constexpr int softCo2Threshold = 750;
+      constexpr int hardCo2Threshold = 1000;
 
-      if (*result < humidityThreshold)
+      if (*result > softCo2Threshold)
       {
         LaMetricManager::Frame frame;
-        frame.m_text = "PODLEJ";
-        frame.m_icon = 72618;
-        frame.m_duration = 3100;
+        frame.m_text = (*result > hardCo2Threshold) ? "LOW O2!" : "LOW 02";
+        frame.m_icon =  (*result > hardCo2Threshold) ? 31830 : 73113;
 
         if (m_frameHandle)
         {

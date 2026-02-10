@@ -16,6 +16,7 @@
 #include "OvertimeTracker.h"
 #include "LaMetricAirQualityProvider.h"
 #include "HumidityPlantAlerter.h"
+#include "CO2Alerter.h"
 
 WiFiMulti WiFiMulti;
 
@@ -34,6 +35,7 @@ SA::OvertimeTracker g_overtimeTracker(g_server);
 SA::LaMetricAirQualityProvider g_airQualityProvider;
 
 SA::HumidityPlantAlerter g_humidityPlantAlerter;
+SA::CO2Alerter g_co2Alerter;
 
 void setup() 
 {
