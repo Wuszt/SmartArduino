@@ -1,13 +1,10 @@
-# ArduinoDisplay
-ArduinoDisplay is an ESP32 project for driving a **64×64 HUB75 RGB LED matrix** and showing a rotating playlist of static images, animated GIFs, and real-time pixel simulations. The project stores media in **LittleFS** and switches between different “drawers” such as bitmaps, GIF animations, Conway’s Game of Life, and a sand simulation.
+# SmartArduino
+SmartArduino is an experimental **ESP32 + Arduino** project focused on integrating embedded devices with the **SmartThings Cloud**.
 
-## Features
-- Displays **BMP images**
-- Plays **GIF animations**
-- Runs built-in procedural effects:
-  - **Game of Life**
-  - **Sand simulation**
-- Dynamic brightness adaptation using a photoresistor sensor
-- Stores media in **LittleFS**
-
-https://github.com/user-attachments/assets/af751ffd-04ab-4190-9e8c-0ea043d4e0fc
+## What it does
+* Communicates with SmartThings via REST API (GET / POST)
+* Reads device states and sends commands
+* Handles access / refresh tokens
+* Uses HTTPS with `NetworkClientSecure`
+* Supports BLE features (e.g. HID keyboard, connection tracking)
+* Communicates with LaMetric clock
