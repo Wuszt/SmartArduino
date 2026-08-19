@@ -19,7 +19,7 @@ namespace SA
     virtual void Update() override;
     virtual unsigned long GetInterval() const override
     {
-      return 30u * 60u * 1000u;
+      return 10u * 60u * 1000u;
     }
 
     std::unique_ptr<LaMetricFrameRequestHandle> m_frameHandle;

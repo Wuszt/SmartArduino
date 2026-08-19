@@ -17,6 +17,7 @@
 #include "LaMetricAirQualityProvider.h"
 #include "HumidityPlantAlerter.h"
 #include "CO2Alerter.h"
+#include "Printer3DProvider.h"
 
 WiFiMulti WiFiMulti;
 
@@ -36,6 +37,8 @@ SA::LaMetricAirQualityProvider g_airQualityProvider;
 
 SA::HumidityPlantAlerter g_humidityPlantAlerter;
 SA::CO2Alerter g_co2Alerter;
+
+SA::Printer3DProvider g_printer3DProvider;
 
 void setup() 
 {

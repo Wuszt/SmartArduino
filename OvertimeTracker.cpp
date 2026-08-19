@@ -57,7 +57,7 @@ namespace SA
         snprintf(textBuffer, sizeof(textBuffer), "%dh %dm", remainingHours, remainingMinutes);
         frame.m_text = textBuffer;
         frame.m_icon = 51055;
-        frame.m_goalData = {.m_start = 0, .m_current = *m_remainingTime, .m_end = maxTime};
+        frame.m_goalData = {.m_start = 0, .m_current = maxTime - *m_remainingTime, .m_end = maxTime};
       }
       else
       {

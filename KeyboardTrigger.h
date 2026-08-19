@@ -1,4 +1,5 @@
 #pragma once
+#include <Arduino.h>
 #include <memory>
 #include "UpdateManager.h"
 
@@ -12,7 +13,7 @@ namespace SA
       virtual void Update() override;
       virtual unsigned long GetInterval() const override
       {
-        return 10u * 1000u;
+        return (10u + random(0, 5)) * 1000u;
       }
 
       virtual const char* GetName() const override = 0;

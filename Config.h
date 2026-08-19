@@ -24,6 +24,10 @@ namespace SA::Config
   extern const char* c_humidityPlantDevice;
   extern const char* c_co2DetectorDevice;
 
+  extern const char* c_printerIP;
+  extern const char* c_printerSerial;
+  extern const char* c_printerAccessCode;
+
   extern const char* c_smartThingsURL;
   extern const char* c_smartThingsRootCA;
 }

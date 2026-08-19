@@ -31,7 +31,7 @@ namespace SA
       char durationBuffer[32] = "";
       if (frame.m_duration > 0)
       {
-        snprintf(goalDataBuffer, sizeof(goalDataBuffer), R"rl(, "duration": %d)rl", frame.m_duration); 
+        snprintf(durationBuffer, sizeof(durationBuffer), R"rl(, "duration": %d)rl", frame.m_duration);
       }
 
       char frameBuffer[128];

@@ -60,7 +60,7 @@ namespace SA
 
   void UpdateManager::Register(IUpdatable& updatable)
   {
-    m_updatables.push_back({&updatable, millis() + random(10u * 1000, 120u * 1000)});
+    m_updatables.push_back({&updatable, millis() + random(10 * 1000, 120 * 1000)});
   }
 
   void UpdateManager::Unregister(IUpdatable& updatable)
