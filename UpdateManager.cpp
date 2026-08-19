@@ -17,6 +17,9 @@ namespace SA
 
   void UpdateManager::Update()
   {
+    std::vector<const char*> updatedNames;
+    updatedNames.reserve(m_updatables.size());
+
     for (Entry& entry : m_updatables)
     {
       if (millis() < entry.m_nextUpdateTimestamp)
@@ -25,6 +28,7 @@ namespace SA
       }
 
       entry.m_updatable->Update();
+      updatedNames.push_back(entry.m_updatable->GetName());
       entry.m_nextUpdateTimestamp = millis() + entry.m_updatable->GetInterval();
     }
 
@@ -32,11 +36,31 @@ namespace SA
     {
         return a.m_nextUpdateTimestamp < b.m_nextUpdateTimestamp;
     });
+
+    Serial.print("Updated updatables: ");
+    if (updatedNames.empty())
+    {
+      Serial.println("none");
+    }
+    else
+    {
+      for (size_t index = 0; index < updatedNames.size(); ++index)
+      {
+        if (index > 0)
+        {
+          Serial.print(", ");
+        }
+
+        Serial.print(updatedNames[index]);
+      }
+
+      Serial.println();
+    }
   }
 
   void UpdateManager::Register(IUpdatable& updatable)
   {
-    m_updatables.push_back({&updatable, 0u});
+    m_updatables.push_back({&updatable, millis() + random(10u * 1000, 120u * 1000)});
   }
 
   void UpdateManager::Unregister(IUpdatable& updatable)

@@ -15,6 +15,8 @@ namespace SA
         return 10u * 1000u;
       }
 
+      virtual const char* GetName() const override = 0;
+
     protected:
       virtual void OnTriggered() = 0;
       SABleKeyboard& m_keyboard;

@@ -10,6 +10,11 @@ namespace SA
     HumidityPlantAlerter();
     ~HumidityPlantAlerter();
 
+    virtual const char* GetName() const override
+    {
+      return "HumidityPlantAlerter";
+    }
+
   private:
     virtual void Update() override;
     virtual unsigned long GetInterval() const override

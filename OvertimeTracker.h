@@ -19,6 +19,11 @@ namespace SA
       return 10u * 1000u;
     }
 
+    virtual const char* GetName() const override
+    {
+      return "OvertimeTracker";
+    }
+
   private:
     std::unique_ptr<RequestsServerListenerHandle> m_serverRequestHandle;
     std::unique_ptr<LaMetricFrameRequestHandle> m_frameRequestHandle;

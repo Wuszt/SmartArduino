@@ -14,6 +14,11 @@ namespace SA
       {
         return 60u * 1000u;
       }
+
+    virtual const char* GetName() const override
+      {
+        return "LaMetricBluetoothController";
+      }
   
   private:
     std::optional<bool> m_shouldBeEnabled;

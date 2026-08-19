@@ -10,6 +10,11 @@ namespace SA
     LaMetricAirQualityProvider();
     ~LaMetricAirQualityProvider();
 
+    virtual const char* GetName() const override
+    {
+      return "LaMetricAirQualityProvider";
+    }
+
   private:
     virtual void Update() override;
     virtual unsigned long GetInterval() const override

@@ -10,6 +10,7 @@ namespace SA
       virtual ~IUpdatable();
       virtual void Update() = 0;
       virtual unsigned long GetInterval() const = 0;
+      virtual const char* GetName() const = 0;
   };
 
   class UpdateManager

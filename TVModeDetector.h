@@ -14,6 +14,11 @@ namespace SA
       {
         return 10 * 1000;
       }
+
+      virtual const char* GetName() const override
+      {
+        return "TVModeDetector";
+      }
     private:
       std::optional<bool> m_isEnabled;
   };

@@ -10,6 +10,11 @@ namespace SA
     CO2Alerter();
     ~CO2Alerter();
 
+    virtual const char* GetName() const override
+    {
+      return "CO2Alerter";
+    }
+
   private:
     virtual void Update() override;
     virtual unsigned long GetInterval() const override

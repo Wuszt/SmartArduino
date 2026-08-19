@@ -17,6 +17,11 @@ namespace SA
         return 10u * 1000u;
       }
 
+      virtual const char* GetName() const override
+      {
+        return "KeyboardTracker";
+      }
+
     private:
       SABleKeyboard& m_keyboard;
       std::optional<bool> m_isAuthenticated;

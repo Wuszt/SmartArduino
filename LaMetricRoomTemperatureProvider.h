@@ -11,6 +11,11 @@ namespace SA
   public:
       LaMetricRoomTemperatureProvider();
       
+      virtual const char* GetName() const override
+      {
+        return "LaMetricRoomTemperatureProvider";
+      }
+
   private:
     virtual void Update() override;
     virtual unsigned long GetInterval() const override

@@ -11,6 +11,11 @@ namespace SA
     public:
       SteamBootstrapper(SABleKeyboard& keyboard);
 
+      virtual const char* GetName() const override
+      {
+        return "SteamBootstrapper";
+      }
+
     protected:
       virtual void OnTriggered() override;
   };

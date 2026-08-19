@@ -9,6 +9,11 @@ namespace SA
     public:
       Logger(SABleKeyboard& keyboard);
       
+      virtual const char* GetName() const override
+      {
+        return "Logger";
+      }
+
     protected:
       virtual void OnTriggered() override;
   };
