@@ -9,6 +9,7 @@
 #include "KeyboardTracker.h"
 #include "LaMetricRoomTemperatureProvider.h"
 #include "LaMetricBluetoothController.h"
+#include "LaMetricBrightnessController.h"
 #include "UpdateManager.h"
 #include "SmartThingsManager.h"
 #include "LaMetricManager.h"
@@ -24,6 +25,7 @@ WiFiMulti WiFiMulti;
 SA::TVModeDetector g_tvModeDetector;
 SA::LaMetricRoomTemperatureProvider g_laMetricRoomTemperatureProvider;
 SA::LaMetricBluetoothController g_laMetricBluetoothController;
+SA::LaMetricBrightnessController g_laMetricBrightnessController;
 
 SA::SABleKeyboard g_keyboard{"SmartArduino", "SmartArduino", 100};
 SA::Logger g_logger{g_keyboard};
