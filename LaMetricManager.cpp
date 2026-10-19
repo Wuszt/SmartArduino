@@ -47,7 +47,7 @@ namespace SA
     }
 
     snprintf(otherBuff, bufferSize, currentBuff, "");
-    snprintf(currentBuff, bufferSize, "%s/actions", Config::c_laMetricWidgetID);
+    snprintf(currentBuff, bufferSize, "%s", Config::c_laMetricWidgetID);
     Utils::PostToLaMetric(currentBuff, otherBuff);
   }
 
